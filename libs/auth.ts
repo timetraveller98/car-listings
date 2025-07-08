@@ -31,9 +31,6 @@ export const authOptions: NextAuthOptions = {
             email: true,
             password: true,
             role: true,
-            isEnabled: true,
-            emailVerified: true,
-            image: true,
           },
         });
         if (!existingUser) {
@@ -47,18 +44,10 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        if (!existingUser.isEnabled) {
-          throw new Error("User account is disabled.");
-        }
-        if (!existingUser.emailVerified) {
-          throw new Error("User account is not verified.");
-        }
-
         return {
           id: `${existingUser.id}`,
           name: existingUser.name,
           email: existingUser.email,
-          image: existingUser.image,
           role: existingUser.role,
         };
       },
@@ -71,7 +60,6 @@ export const authOptions: NextAuthOptions = {
           ...token,
           name: user.name,
           role: user.role,
-          image: user.image,
         };
       }
       return token;
@@ -81,7 +69,6 @@ export const authOptions: NextAuthOptions = {
         ...session,
         user: {
           ...session.user,
-          image: token.image,
           name: token.name,
           role: token.role,
         },

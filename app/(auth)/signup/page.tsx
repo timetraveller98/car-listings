@@ -53,7 +53,7 @@ const CustomerForm = () => {
       const result = await setUsers(formData);
 
       if (result.success) {
-        toast.success("Email sent! Please verify.");
+        toast.success("Register Successpully.");
         router.push("/login");
       } else {
         toast.error(result.message || "An unexpected error occurred.");

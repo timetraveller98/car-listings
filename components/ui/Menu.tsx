@@ -75,7 +75,7 @@ const DropdownMenu: React.FC<NavbarProps> = ({ closeNavbar, email, name }) => {
                 className="block px-4 py-2 text-sm text-secondary hover:bg-gray-100"
                 role="menuitem"
               >
-                Admin
+                Dashboard
               </Link>
               <hr className="my-1" />
               <a

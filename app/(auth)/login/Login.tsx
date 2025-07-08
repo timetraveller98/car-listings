@@ -182,20 +182,6 @@ const Login = () => {
             </span>
           </p>
         </div>
-        <div>
-          <p
-            className="my-3 text-center"
-            style={{ fontSize: "14px", cursor: "pointer" }}
-          >
-            <span
-              style={{ borderBottom: "1px groove black" }}
-              className="text-dark"
-              onClick={() => router.push("/forget")}
-            >
-              Forget Password
-            </span>
-          </p>
-        </div>
       </div>
     </div>
   );

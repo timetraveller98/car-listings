@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useMemo, useCallback, useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -42,11 +42,9 @@ const ShowUser = () => {
 
   const columns: GridColDef[] = useMemo(
     () => [
-      { field: "name", headerName: "Name", width: 120 },
-      { field: "email", headerName: "Email", width: 200 },
-      { field: "contact", headerName: "Contact", width: 110 },
-      { field: "membershipId", headerName: "Membership ID", width: 130 },
-      { field: "role", headerName: "Role", width: 120 },
+      { field: "name", headerName: "Name", width: 250 },
+      { field: "email", headerName: "Email", width: 250 },
+      { field: "role", headerName: "Role", width: 250 },
     ],
     [router]
   );

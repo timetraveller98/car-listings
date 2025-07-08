@@ -8,12 +8,10 @@ declare module "next-auth" {
     user: User & {
       name: string;
       role: string;
-      image?: string;
     };
     token: {
       name: string;
       role: string;
-      image?: string;
     };
   }
 }
@@ -22,6 +20,5 @@ declare module "next-auth/jwt" {
   interface JWT {
     name?: string | null;
     role?: string;
-    image?: string | null;
   }
 }
