@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import toast from "react-hot-toast";
 import Box from "@mui/material/Box";
@@ -12,7 +12,6 @@ import Heading from "@/components/ui/Heading";
 import getUsers from "@/actions/getUsers";
 import { User } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
-import { debounce } from "lodash";
 const ShowUser = () => {
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
