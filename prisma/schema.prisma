@@ -8,14 +8,25 @@ datasource db {
 }
 
 model User {
-  id               String    @id @default(auto()) @map("_id") @db.ObjectId
-  name             String
-  email            String    @unique
-  password         String
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-  role             Role      @default(USER)
-  address          Address?
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  role      Role      @default(USER)
+  address   Address?
+}
+
+model Listing {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  brand     String
+  model     String
+  year      Int      @default(2020)
+  price     Float    @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  status    String   @default("pending")
 }
 
 type Address {

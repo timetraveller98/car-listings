@@ -10,6 +10,7 @@ const Admin = async () => {
     getCurrentUser(),
   ]);
   const users = await db.user.findMany()
+  const listings = await db.listing.findMany()
   if (!currentUser) {
     return <Login />;
   }
@@ -26,7 +27,7 @@ const Admin = async () => {
       <Row>
         <Col md={12}>
           <div className="flex gap-4 justify-between flex-wrap">
-            <Summary users={users} />
+            <Summary users={users} listings={listings} />
           </div>
         </Col>
       </Row>

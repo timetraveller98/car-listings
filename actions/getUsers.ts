@@ -47,7 +47,7 @@ export async function setUsers(formData: {
     await db.user.create({
       data: { name, email, password: hashedPassword },
     });
-    return { success: true, message: "Please verify email" };
+    return { success: true, message: "Successfully Register" };
   } catch (error) {
     console.error("Error:", error);
     return { success: false, message: "Failed to register user." };

@@ -90,23 +90,6 @@ const ShowUser = () => {
                   color: "#000",
                 },
               }}
-              slots={{
-                toolbar: GridToolbar,
-                noRowsOverlay: () => (
-                  <Box sx={{ p: 2, textAlign: "center" }}>No users found.</Box>
-                ),
-              }}
-              slotProps={{
-                toolbar: {
-                  showQuickFilter: true,
-                  quickFilterProps: {
-                    debounceMs: 500,
-                    onChange: (e: any) => {
-                      debouncedSearch(e.target.value);
-                    },
-                  },
-                },
-              }}
             />
           </Box>
         </Col>

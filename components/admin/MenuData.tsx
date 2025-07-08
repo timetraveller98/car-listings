@@ -2,6 +2,7 @@ import {
   LayoutDashboard,
   Users,
   LucideIcon,
+  Car,
 } from "lucide-react";
 
 export interface MenuItem {
@@ -18,6 +19,12 @@ const menuItems = [
     href: "/admin",
     icon: LayoutDashboard,
     roles: ["ADMIN", "SUPERADMIN"],
+  },
+  {
+    label: "Listing",
+    href: "/admin/listing",
+    icon: Car,
+    roles: ["SUPERADMIN"],
   },
   {
     label: "Users",
