@@ -2,7 +2,6 @@
 import * as React from "react";
 import { useMemo, useState, useEffect } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import Box from "@mui/material/Box";
 import {
@@ -15,7 +14,6 @@ import getUsers from "@/actions/getUsers";
 import { User } from "@prisma/client";
 
 const ShowUser = () => {
-  const router = useRouter();
 
   const [rows, setRows] = useState<User[]>([]);
   const [pageSize, setPageSize] = useState<number>(10);
@@ -46,7 +44,7 @@ const ShowUser = () => {
       { field: "email", headerName: "Email", width: 250 },
       { field: "role", headerName: "Role", width: 250 },
     ],
-    [router]
+    []
   );
 
   return (

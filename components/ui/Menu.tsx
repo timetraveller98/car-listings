@@ -2,8 +2,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
-import { FaUserCircle } from "react-icons/fa";
-import Image from "next/image";
 
 interface NavbarProps {
   name: string | null | undefined;
