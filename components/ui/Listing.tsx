@@ -33,49 +33,53 @@ const Listing = () => {
       [name]: value.trim() === "",
     }));
   };
-const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  setLoading(true);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
 
-  const formattedData = {
-    brand: formData.brand.trim(),
-    model: formData.model.trim(),
-    year: parseInt(formData.year, 10),
-    price: parseFloat(formData.price),
+    const formattedData = {
+      brand: formData.brand.trim(),
+      model: formData.model.trim(),
+      year: parseInt(formData.year, 10),
+      price: parseFloat(formData.price),
+    };
+
+    try {
+      const result = await setListing(formattedData);
+
+      if (result.redirect) {
+        toast.error(result.message);
+        router.push(result.redirect);
+        return;
+      }
+      if (result.success) {
+        toast.success("Listing created successfully.");
+        setFormData({
+          brand: "",
+          model: "",
+          year: "",
+          price: "",
+        });
+        setErrors({
+          brand: false,
+          model: false,
+          year: false,
+          price: false,
+        });
+        router.refresh();
+      } else {
+        toast.error(result.message || "An unexpected error occurred.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  try {
-    const result = await setListing(formattedData);
-
-    if (result.success) {
-      toast.success("Listing created successfully.");
-      // ✅ Reset form after successful submission
-      setFormData({
-        brand: "",
-        model: "",
-        year: "",
-        price: "",
-      });
-      setErrors({
-        brand: false,
-        model: false,
-        year: false,
-        price: false,
-      });
-      router.refresh(); // Optional if you're revalidating the page
-    } else {
-      toast.error(result.message || "An unexpected error occurred.");
-    }
-  } catch (error) {
-    console.error("Error:", error);
-    toast.error("Something went wrong");
-  } finally {
-    setLoading(false);
-  }
-};
-
   return (
-    <div className="d-flex justify-content-center bg-body my-4 align-items-center flex-column">
+    <div className="d-flex justify-content-center bg-body my-4 mx-3 align-items-center flex-column">
       <div className="border flex flex-column shadow my-3 bg-light py-4 rounded px-5">
         <form onSubmit={handleSubmit}>
           <Typography variant="h6" className="text-center" gutterBottom>
@@ -127,7 +131,9 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
             required
             sx={{ my: 2 }}
             InputProps={{
-              startAdornment: <InputAdornment position="start">₹</InputAdornment>,
+              startAdornment: (
+                <InputAdornment position="start">₹</InputAdornment>
+              ),
             }}
           />
 

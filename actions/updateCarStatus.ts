@@ -31,3 +31,15 @@ export async function updateCarStatus({ id, status }: UpdateCarStatusInput) {
     };
   }
 }
+
+// Delete a user by ID
+export async function deleteCarById(id: string) {
+  const currentUser = await getCurrentUser();
+  if (!currentUser || currentUser.role !== 'SUPERADMIN') {
+    throw new Error("Unauthorized User");
+  }
+  await db.listing.delete({
+    where: { id },
+  });
+  return { success: true };
+}

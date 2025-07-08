@@ -1,7 +1,6 @@
 "use server";
 import { db } from "@/libs/db";
 import { getCurrentUser } from "@/actions/getCurrentUser";
-import { Role } from "@prisma/client";
 export async function getCarById(id: string) {
   const currentUser = await getCurrentUser();
   if (!currentUser) {

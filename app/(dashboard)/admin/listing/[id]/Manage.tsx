@@ -122,7 +122,7 @@ const queryClient = useQueryClient();
   };
 
   return (
-    <div className="d-flex justify-content-center bg-body my-4 align-items-center flex-column">
+    <div className="d-flex justify-content-center bg-body my-4 mx-3 align-items-center flex-column">
       <div className="border shadow my-3 bg-light py-4 rounded px-5">
         <form onSubmit={handleSubmit}>
           <Typography variant="h6" className="text-center" gutterBottom>
