@@ -11,20 +11,11 @@ model User {
   id               String    @id @default(auto()) @map("_id") @db.ObjectId
   name             String
   email            String    @unique
-  contact          String?
-  membershipId     String    @unique
-  resetToken       String?
-  resetTokenExpiry DateTime?
-  isEnabled        Boolean   @default(true)
   password         String
-  image            String?
-  referral         String?
-  emailVerified    Boolean   @default(false)
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
   role             Role      @default(USER)
   address          Address?
-  @@index([contact])
 }
 
 type Address {

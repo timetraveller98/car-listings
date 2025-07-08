@@ -39,14 +39,14 @@ const DropdownMenu: React.FC<NavbarProps> = ({ closeNavbar, email, name }) => {
           onClick={toggleDropdown}
           className="inline-flex justify-center w-full px-3 py-2 text-sm font-medium border text-black  bg-inherit hover:bg-white focus:outline-none"
         >
-          <div className="rounded-full py-0 me-2 overflow-hidden flex items-center justify-center bg-gray-200">
+          <div className="py-0 ">
             {name ? (
-              <p>{name}</p>
+              <p className="p-0 m-0 text-[14px] text-secondary">{name}</p>
             ) : (
-              <p>Login</p>
+              <p className="p-0 m-0 text-[14px] text-secondary">Login</p>
             )}
           </div>
-          <div className="mt-2">
+          <div className="mt-1 text-secondary">
           <svg
             className="w-4 h-4 ms-2 text-white-400"
             xmlns="http://www.w3.org/2000/svg"
