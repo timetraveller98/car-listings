@@ -1,7 +1,7 @@
 "use server";
 import { db } from "@/libs/db";
 import { hash } from "bcrypt";
-export default async function getUsers(page: number, limit: number, searchQuery: string) {
+export default async function getUsers(page: number, limit: number) {
   const skip = (page - 1) * limit;
   const users = await db.user.findMany({
     where: {

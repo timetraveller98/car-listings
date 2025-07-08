@@ -7,7 +7,6 @@ import Box from "@mui/material/Box";
 import {
   DataGrid,
   GridColDef,
-  GridToolbar,
 } from "@mui/x-data-grid";
 import Heading from "@/components/ui/Heading";
 import getUsers from "@/actions/getUsers";
@@ -17,17 +16,9 @@ import { debounce } from "lodash";
 const ShowUser = () => {
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
-  const [searchQuery, setSearchQuery] = useState("");
-  const debouncedSearch = useMemo(
-    () =>
-      debounce((value: string) => {
-        setSearchQuery(value);
-      }, 500),
-    []
-  );
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["users", page, pageSize, searchQuery],
-    queryFn: async () => await getUsers(page + 1, pageSize, searchQuery),
+    queryKey: ["users", page, pageSize],
+    queryFn: async () => await getUsers(page + 1, pageSize),
     staleTime: 1000 * 60 * 5,
   });
 

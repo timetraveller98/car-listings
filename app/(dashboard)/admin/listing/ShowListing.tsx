@@ -8,7 +8,6 @@ import {
   DataGrid,
   GridColDef,
   GridRenderCellParams,
-  GridToolbar,
 } from "@mui/x-data-grid";
 import Heading from "@/components/ui/Heading";
 import getListing from "@/actions/getListing";
@@ -28,16 +27,8 @@ const ShowListing = () => {
   const router = useRouter();
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
-  const [searchQuery, setSearchQuery] = useState("");
-  const debouncedSearch = useMemo(
-    () =>
-      debounce((value: string) => {
-        setSearchQuery(value);
-      }, 500),
-    []
-  );
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["listings", page, pageSize, searchQuery],
+    queryKey: ["listings", page, pageSize],
     queryFn: async () => await getListing(page + 1, pageSize),
     staleTime: 1000 * 60 * 5,
   });
