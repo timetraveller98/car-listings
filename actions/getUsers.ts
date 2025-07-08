@@ -1,9 +1,7 @@
 "use server";
 import { db } from "@/libs/db";
 import { hash } from "bcrypt";
-import nodemailer from "nodemailer";
-
-export default async function getUsers(page: number, limit: number) {
+export default async function getUsers(page: number, limit: number, searchQuery: string) {
   const skip = (page - 1) * limit;
   const users = await db.user.findMany({
     where: {

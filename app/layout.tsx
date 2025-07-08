@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Toaster } from "react-hot-toast";
 import Header from "@/components/ui/Header";
 import Footer from "@/components/ui/Footer";
+import ReactQueryProvider from "@/providers/ReactQueryProvider";
 const poppins = Poppins({
   subsets: ["latin", "latin-ext"],
   weight: "400" as const,
@@ -29,6 +30,7 @@ export default function RootLayout({
       <body
         className={poppins.className}
       >
+          <ReactQueryProvider>
         <Toaster
           toastOptions={{
             style: {
@@ -40,6 +42,7 @@ export default function RootLayout({
         <Header />
         {children}
         <Footer />
+        </ReactQueryProvider>
       </body>
     </html>
   );

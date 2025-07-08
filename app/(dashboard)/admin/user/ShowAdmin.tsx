@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useMemo, useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import toast from "react-hot-toast";
 import Box from "@mui/material/Box";
@@ -12,40 +12,34 @@ import {
 import Heading from "@/components/ui/Heading";
 import getUsers from "@/actions/getUsers";
 import { User } from "@prisma/client";
-
+import { useQuery } from "@tanstack/react-query";
+import { debounce } from "lodash";
 const ShowUser = () => {
-
-  const [rows, setRows] = useState<User[]>([]);
-  const [pageSize, setPageSize] = useState<number>(10);
-  const [rowCount, setRowCount] = useState<number>(0);
-  const [page, setPage] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(false);
-  const fetchData = async (pageNumber: number, limit: number) => {
-    try {
-      setLoading(true);
-      const data = await getUsers(pageNumber + 1, limit);
-      setRows(data.users);
-      setRowCount(data.total);
-    } catch (error) {
-      console.error("Failed to fetch users:", error);
-      toast.error("Failed to load user data");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData(page, pageSize);
-  }, [page, pageSize]);
-
-  const columns: GridColDef[] = useMemo(
-    () => [
-      { field: "name", headerName: "Name", width: 250 },
-      { field: "email", headerName: "Email", width: 250 },
-      { field: "role", headerName: "Role", width: 250 },
-    ],
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        setSearchQuery(value);
+      }, 500),
     []
   );
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["users", page, pageSize, searchQuery],
+    queryFn: async () => await getUsers(page + 1, pageSize, searchQuery),
+    staleTime: 1000 * 60 * 5,
+  });
+
+  React.useEffect(() => {
+    if (isError) toast.error("Failed to load user data");
+  }, [isError]);
+
+  const columns: GridColDef[] = [
+    { field: "name", headerName: "Name", width: 250 },
+    { field: "email", headerName: "Email", width: 350 },
+    { field: "role", headerName: "Role", width: 250 },
+  ];
 
   return (
     <Container>
@@ -54,15 +48,11 @@ const ShowUser = () => {
           <Heading title="Manage User" center />
           <Box sx={{ width: "100%", height: "450px" }}>
             <DataGrid
-              disableColumnFilter
-              disableColumnSelector
-              disableDensitySelector
-              rows={rows}
+              rows={data?.users ?? []}
               columns={columns}
-              getRowId={(row) => row.id}
-              slots={{ toolbar: GridToolbar }}
-              rowCount={rowCount}
-              loading={loading}
+              getRowId={(row: User) => row.id}
+              rowCount={data?.total ?? 0}
+              loading={isLoading}
               pagination
               paginationMode="server"
               pageSizeOptions={[10, 25, 50]}
@@ -71,13 +61,7 @@ const ShowUser = () => {
                 setPage(page);
                 setPageSize(pageSize);
               }}
-              getRowClassName={(params) =>
-                params.row.isEnabled
-                  ? "super-app-theme--Active"
-                  : "super-app-theme--Inactive"
-              }
               sx={{
-                border: "none",
                 "& .MuiDataGrid-footerContainer": {
                   justifyContent: "flex-end",
                   paddingRight: "16px",
@@ -90,29 +74,37 @@ const ShowUser = () => {
                     margin: "0 8px",
                   },
                 "& .MuiDataGrid-row.Mui-selected": {
-                  border: "none",
                   backgroundColor: "inherit",
                 },
                 "& .MuiDataGrid-row:hover": {
                   backgroundColor: "inherit",
                 },
+                "& .MuiDataGrid-toolbarContainer": {
+                  color: "#000000",
+                  "& .MuiButton-root, & .MuiInputBase-root, & .MuiSvgIcon-root":
+                    {
+                      color: "#000000",
+                    },
+                },
                 "& .MuiDataGrid-cell": {
                   color: "#000",
                 },
-                "& .MuiDataGrid-cell:focus": {
-                  outline: "none",
-                },
-                "& .MuiDataGrid-row.Mui-selected:hover": {
-                  backgroundColor: "inherit",
-                },
-                "& .MuiDataGrid-cell:focus-within": {
-                  outline: "none",
-                },
+              }}
+              slots={{
+                toolbar: GridToolbar,
+                noRowsOverlay: () => (
+                  <Box sx={{ p: 2, textAlign: "center" }}>No users found.</Box>
+                ),
               }}
               slotProps={{
                 toolbar: {
                   showQuickFilter: true,
-                  quickFilterProps: { debounceMs: 500 },
+                  quickFilterProps: {
+                    debounceMs: 500,
+                    onChange: (e: any) => {
+                      debouncedSearch(e.target.value);
+                    },
+                  },
                 },
               }}
             />
