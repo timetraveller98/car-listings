@@ -26,13 +26,34 @@ const Listing = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({
-      ...prev,
-      [name]: value.trim() === "",
-    }));
-  };
+  const { name, value } = e.target;
+
+  if (name === "year") {
+    if (value === "") {
+      setFormData((prev) => ({ ...prev, year: "" }));
+      setErrors((prev) => ({ ...prev, year: true }));
+      return;
+    }
+    if (value.length > 4) return;
+    const year = parseInt(value, 10);
+
+    if (!isNaN(year) && year >= 1900 && year <= 2025) {
+      setFormData((prev) => ({ ...prev, year: value }));
+      setErrors((prev) => ({ ...prev, year: false }));
+    } else {
+      setFormData((prev) => ({ ...prev, year: value }));
+      setErrors((prev) => ({ ...prev, year: true }));
+    }
+
+    return;
+  }
+  setFormData((prev) => ({ ...prev, [name]: value }));
+  setErrors((prev) => ({
+    ...prev,
+    [name]: value.trim() === "",
+  }));
+};
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);

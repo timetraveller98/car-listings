@@ -57,7 +57,6 @@ const queryClient = useQueryClient();
 
     fetchCar();
   }, [id]);
-
   useEffect(() => {
     if (carData) {
       setFormData({
@@ -68,7 +67,6 @@ const queryClient = useQueryClient();
       });
     }
   }, [carData]);
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const isNumberField = name === "year" || name === "price";
@@ -83,43 +81,50 @@ const queryClient = useQueryClient();
       [name]: value.trim?.() === "",
     }));
   };
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  const trimmedBrand = formData.brand.trim();
+  const trimmedModel = formData.model.trim();
+  const { year, price } = formData;
+  const newErrors = {
+    brand: trimmedBrand === "",
+    model: trimmedModel === "",
+    year: !year || year < 1900 || year > 2025,
+    price: !price || price < 0,
+  };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  setErrors(newErrors);
 
-    const { brand, model, year, price } = formData;
+  if (Object.values(newErrors).includes(true)) {
+    return toast.error(" Year must be 1900–2025.");
+  }
 
-    const newErrors = {
-      brand: brand.trim() === "",
-      model: model.trim() === "",
-      year: !year,
-      price: !price,
+  setLoading(true);
+  try {
+    const payload = {
+      brand: trimmedBrand,
+      model: trimmedModel,
+      year,
+      price,
     };
 
-    setErrors(newErrors);
+    const response = await updateCarById(id, payload);
 
-    if (Object.values(newErrors).includes(true)) {
-      return toast.error("Please fill out all required fields correctly.");
+    if (response?.success) {
+      toast.success("Car listing updated successfully.");
+      await queryClient.invalidateQueries({ queryKey: ["listings"] });
+      router.push("/admin/listing");
+    } else {
+      toast.error(response?.message || "Failed to update car data.");
     }
+  } catch (error) {
+    console.error("Update error:", error);
+    toast.error("An unexpected error occurred while updating.");
+  } finally {
+    setLoading(false);
+  }
+};
 
-    setLoading(true);
-    try {
-      
-      const response = await updateCarById(id, formData);
-      if (response) {
-        toast.success("Car listing updated successfully.");
-        await queryClient.invalidateQueries({ queryKey: ["listings"] });
-        router.push("/admin/listing");
-      } else {
-        toast.error("Failed to update car data.");
-      }
-    } catch (error) {
-      console.error("Update error:", error);
-      toast.error("An error occurred while updating.");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="d-flex justify-content-center bg-body my-4 mx-3 align-items-center flex-column">
@@ -128,7 +133,6 @@ const queryClient = useQueryClient();
           <Typography variant="h6" className="text-center" gutterBottom>
             Update Car Listing
           </Typography>
-
           <TextField
             name="brand"
             label="Brand"

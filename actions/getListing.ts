@@ -30,6 +30,9 @@ export async function setListing(formData: {
     if (!brand || !year || !price || !model) {
       return { success: false, message: "All fields are required." };
     }
+     if (year < 1900 || year > 2025) {
+      return { success: false, message: "Car Model between 1900 and 2025" };
+    }
     const currentUser = await getCurrentUser();
       if (!currentUser) {
       return {
@@ -38,6 +41,7 @@ export async function setListing(formData: {
         message: "Please login first.",
       };
     }
+
     await db.listing.create({
       data: {
         user: { connect: { id: currentUser?.id } },
