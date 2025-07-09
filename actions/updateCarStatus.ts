@@ -16,7 +16,7 @@ export async function updateCarStatus({ id, status }: UpdateCarStatusInput) {
   try {
     const updatedUser = await db.listing.update({
       where: { id: id },
-      data: { status },
+      data: { status, adminEmail:currentUser?.email },
     });
     return {
       success: true,

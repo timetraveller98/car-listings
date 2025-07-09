@@ -52,7 +52,7 @@ const ShowListing = () => {
         const { success } = await deleteCarById(selectedId);
         if (success) {
           toast.success("Car Deleted");
-            await queryClient.invalidateQueries({ queryKey: ["listings"] });
+          await queryClient.invalidateQueries({ queryKey: ["listings"] });
         } else {
           toast.error("Something went wrong");
         }
@@ -109,13 +109,26 @@ const ShowListing = () => {
     [queryClient]
   );
 
+  function formatDate(dateString: string) {
+    const date = new Date(dateString);
+    const options: Intl.DateTimeFormatOptions = {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    };
+    return date.toLocaleString("en-IN", options);
+  }
+
   const columns: GridColDef[] = [
     { field: "brand", headerName: "Brand", width: 150 },
     { field: "model", headerName: "Model", width: 150 },
     { field: "year", headerName: "Year", width: 100 },
-      {
+    {
       field: "name",
-      headerName: "Added By",
+      headerName: "Listing By",
       width: 150,
       renderCell: (params: GridRenderCellParams) => {
         return <div>{params.row.user.name}</div>;
@@ -123,13 +136,13 @@ const ShowListing = () => {
     },
     {
       field: "email",
-      headerName: "Email ID",
+      headerName: "Listing Email ID",
       width: 150,
       renderCell: (params: GridRenderCellParams) => {
         return <div>{params.row.user.email}</div>;
       },
     },
-  
+
     {
       field: "price",
       headerName: "Price",
@@ -236,6 +249,13 @@ const ShowListing = () => {
         />
       ),
     },
+    { field: "adminEmail", headerName: "Audit Email By", width: 200 },
+    {
+      field: "updatedAt",
+      headerName: "Audit Time",
+      width: 250,
+      renderCell: (params) => formatDate(params.row.updatedAt),
+    },
   ];
 
   return (
@@ -303,7 +323,7 @@ const ShowListing = () => {
           </Box>
         </Col>
       </Row>
-        <DeleteModal
+      <DeleteModal
         isOpen={isModalOpen}
         onClose={closeModal}
         onConfirm={handleDelete}

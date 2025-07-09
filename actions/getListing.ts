@@ -31,7 +31,7 @@ export async function setListing(formData: {
       return { success: false, message: "All fields are required." };
     }
      if (year < 1900 || year > 2025) {
-      return { success: false, message: "Car Model between 1900 and 2025" };
+      return { success: false, message: "Car Model between 1900 - 2025" };
     }
     const currentUser = await getCurrentUser();
       if (!currentUser) {
