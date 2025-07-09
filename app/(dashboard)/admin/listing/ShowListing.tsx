@@ -63,7 +63,7 @@ const ShowListing = () => {
         closeModal();
       }
     }
-  }, [selectedId, page, pageSize, closeModal]);
+  }, [selectedId,queryClient, page, pageSize, closeModal]);
 
   const handleConfirm = useCallback(
     async (id: string, status: string) => {
